@@ -10,14 +10,17 @@ my @data = DBIx::Connect->data_array('basic');
 my $app  = DBIx::AnyDBD->connect(@data, 'PApp::Hinduism');
 $PApp::SQL::DBH = $app->get_dbh;
 
+$app->insert_book_in_course_material_via_book_id_and_course_id( 15  , 27);
+#$app->insert_book("Patanjali's Yoga Sutras");
+
 #$app->insert_publisher('University of California Press');
 
 #$app->insert_person('lecturer', 'Eck', 'Diana', 'L');
 
 #my $x = $app->next_in_sequence('course_reader___id');
-#$app->insert_course_reader('Religion 160');
+#$app->insert_course_reader('RELS 104');
 
-#$app->insert_book('Bhagavad Gita');
+
 
 #$app->insert_school("Harvard University");
 #$app->insert_material_type('book');

@@ -27,7 +27,8 @@ for our $school (@school) {
     for my $course_row (@course_row) {
 	print " <h3> $course_row->[1] ($course_row->[5]) </h3>\n";
 	print $app->select_course_lecturer_via_course_id($course_row->[0]), $/;
-	print $course_row->[4];
+# DESCRIPTION	print $course_row->[4];
+	print $app->select_course_materials_via_course_id($course_row->[0]), $/;
     }
     
 #    warn $template->fill_in;

@@ -1,5 +1,6 @@
 package PApp::Hinduism::Default;
 
+use Data::Dumper;
 use DBIx::Recordset;
 use PApp::SQL;
 
@@ -21,11 +22,20 @@ sub insert_publisher {
     sql_exec "INSERT into PUBLISHER VALUES ($publisher_id, '$publisher')";
 }
 
+sub select_school_id_from_school_course_number {
+   my ($ah, $school_course_number) = @_;
+   sql_fetch "SELECT id from course where school_course_number = '$school_course_number'";
+}
+
 sub insert_course_reader {
-    my ($ah, $course_id) = @_;
-    my $id = $ah->select_nextval('course_reader___id');
-    my $cid = $ah->select_id_from_school_course_number('RELS 104');
-    sql_exec "INSERT into course_reader VALUES ($id, $cid)";
+    my ($ah, $school_course_number) = @_;
+    my $crid = $ah->select_nextval('course_reader___id');
+    my $sid  = $ah->select_school_id_from_school_course_number($school_course_number);
+    my $sql = "INSERT into course_reader VALUES ($crid, $sid)";
+    warn $sql;
+    sql_exec $sql;
+    my $mtid = $ah->select_id_from_name('course_reader', 'material_type');
+    $ah->insert_course_material($sid, $mtid, $crid);
 }
 
 sub insert_course_material {
@@ -57,8 +67,16 @@ sub insert_book {
       author_id => $aut_id,
       pub_year => $pub_year
       });
+
+
 }
 
+sub insert_book_in_course_material_via_book_id_and_course_id {
+    my ($ah, $book_id, $course_id) = @_; 
+
+    my $mtid = $ah->select_id_from_name('book', 'material_type');
+    $ah->insert_course_material($course_id,  $mtid, $book_id);
+}
 
 sub insert_material_type {
     my ($ah, $material_type) = @_;
@@ -72,16 +90,24 @@ sub insert_school {
     sql_exec "INSERT into SCHOOL VALUES ($seq_id,'$school')";
 }
 
+sub select_course_materials_via_course_id {
+    my ($ah, $course_id) = @_;
+    my $sql = "SELECT * FROM course_material WHERE course_id = $course_id";
+    warn $sql;
+    my @course_material = sql_fetchall $sql;
+    Dumper(\@course_material);
+}
+
 sub select_course_lecturer_via_course_id {
     my ($ah, $course_id) = @_;
     my $sql = "SELECT lecturer_id FROM course_lecturer WHERE course_id = $course_id";
-    warn $sql;
+#    warn $sql;
     sql_fetch \my($lecturer_id), $sql;
 
     return "None listed" unless $lecturer_id;
 
     $sql = "SELECT first_name, middle_name, last_name FROM person WHERE id = $lecturer_id";
-    warn $sql;
+#    warn $sql;
     sql_fetch \my ($first_name, $middle_name, $last_name), $sql;
     "$first_name $middlename $last_name";
 }
@@ -114,7 +140,7 @@ sub select_course_name_via_school_id {
 
 sub select_course_rows_via_school_id {
     my ($ah, $school_id) = @_;
-    sql_fetchall "select * from course where school_id = $school_id";
+    sql_fetchall "select * from course where school_id = $school_id order by id";
 }
     
 
