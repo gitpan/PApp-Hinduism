@@ -74,9 +74,16 @@ sub insert_school {
 
 sub select_course_lecturer_via_course_id {
     my ($ah, $course_id) = @_;
-    my $sql = "SELECT l into course_lecturer VALUES ($course_id, $lecturer_id)";
+    my $sql = "SELECT lecturer_id FROM course_lecturer WHERE course_id = $course_id";
     warn $sql;
-    sql_exec $sql;
+    sql_fetch \my($lecturer_id), $sql;
+
+    return "None listed" unless $lecturer_id;
+
+    $sql = "SELECT first_name, middle_name, last_name FROM person WHERE id = $lecturer_id";
+    warn $sql;
+    sql_fetch \my ($first_name, $middle_name, $last_name), $sql;
+    "$first_name $middlename $last_name";
 }
 
 

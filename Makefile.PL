@@ -8,7 +8,7 @@ WriteMakefile(
 			    'PApp::SQL' => 0.131,
 			    'DBIx::AnyDBD' => 2.0,
 			    'DBIx::Connect' => 1.7,
-			    'DBIx::Recordset' => 0.24
-
+			    'DBIx::Recordset' => 0.24,
+			    'Text::Template' => 1.43
 			   }, # e.g., Module::Name => 1.1
 );

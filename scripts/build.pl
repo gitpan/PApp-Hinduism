@@ -27,7 +27,7 @@ $PApp::SQL::DBH = $app->get_dbh;
 =head1
 {
 #    my $seq_id    = $app->select_nextval('course___id');
-    my $seq_id    = 27;
+    my $seq_id    = 28;
 #    my $school_id = $app->select_school_id('Harvard University');
 #    $app->insert_course($seq_id,'Readings in Hindu Myth, Image, and Pilgrimage', 'http://www.hds.harvard.edu/cswr/courselist/hinduism.htm', $school_id, 'Intensive reading and research on specific topics in Hindu mythology, image and iconography, temples and temple towns, sacred geography and pilgrimage patterns.', 'Religion 3601');
 

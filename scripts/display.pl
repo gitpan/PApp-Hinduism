@@ -7,7 +7,7 @@ use Data::Dumper;
 use DBIx::AnyDBD;
 use DBIx::Connect;
 use PApp::SQL;
-
+use Text::Template;
 
 my @data = DBIx::Connect->data_array('basic');
 my $app  = DBIx::AnyDBD->connect(@data, 'PApp::Hinduism');
@@ -17,13 +17,19 @@ my @school = $app->select_this_from_that('name', 'school');
 
 my $tab = "\t";
 
-for my $school (@school) {
+for our $school (@school) {
     print $school, $/;
+
+
     my $school_id = $app->select_school_id($school);
 #    warn $school_id;
-    my @course_row = $app->select_course_rows_via_school_id($school_id);
+    our @course_row = $app->select_course_rows_via_school_id($school_id);
     for my $course_row (@course_row) {
-	print $tab, $course_row->[1], $tab, $course_row->[5], $/;
-#	warn Dumper($course_row);
+	print " <h3> $course_row->[1] ($course_row->[5]) </h3>\n";
+	print $app->select_course_lecturer_via_course_id($course_row->[0]), $/;
+	print $course_row->[4];
     }
+    
+#    warn $template->fill_in;
+
 }
