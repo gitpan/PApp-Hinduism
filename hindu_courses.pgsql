@@ -417,6 +417,7 @@ COPY "course_lecturer" FROM stdin;
 36	7
 38	7
 37	7
+45	10
 \.
 --
 -- Data for TOC Entry ID 49 (OID 66482)
@@ -546,7 +547,7 @@ COPY "course" FROM stdin;
 40	Intermediate Sanskrit	http://www.registrar.fas.harvard.edu/Courses/SanskritandIndianStudies.html	2	Sanskrit 102a	
 41	Philosophical Sanskrit	http://www.registrar.fas.harvard.edu/Courses/SanskritandIndianStudies.html	2	Sanskrit 201br	
 35	Understanding Indian Ritual	http://www.registrar.fas.harvard.edu/Courses/SanskritandIndianStudies.html	3	Indian Studies 207a	Investigates the indigenous theory and practice of Indian ritual, from its beginnings in the second millennium BCE (Rgveda) to present time. Stress on the development of the Agnihotra and Homa and Puja rituals, with materials from Vedic, Puranic, Tantric, and Buddhist sources, including their use in Bali, Tibet and Japan, and audio-vidual materials. Recent theories of ritual will also be discussed. Sanskrit texts are used in translation, while read in original in the tandem course, Sanskrit 214.\n\n
-45	Hinduism	http://www.bu.edu/religion/courses/coursespage/courses-new.html	4	Introduction to the Hindu tradition. Ritual and philosophy of the Vedas and Upanishads, yoga in the Bhagavad Gita, gods and goddesses in Hindu mythology, "popular" aspects of village and temple ritual, and problems of modernization and communalism in postcolonial India.	RN 213
+45	Hinduism	http://www.bu.edu/religion/courses/coursespage/courses-new.html	4	RN 213	Introduction to the Hindu tradition. Ritual and philosophy of the Vedas and Upanishads, yoga in the Bhagavad Gita, gods and goddesses in Hindu mythology, "popular" aspects of village and temple ritual, and problems of modernization and communalism in postcolonial India.
 \.
 --
 -- Data for TOC Entry ID 57 (OID 82839)

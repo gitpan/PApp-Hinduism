@@ -184,7 +184,7 @@ sub insert_person {
 }
 
 sub select_unique_dept_id_from_course {
-    sql_fetchall "select distinct dept_id from course order by dept_id";
+    sql_fetchall "select distinct dept_id from course order by dept_id DESC";
 }
 
 sub select_dept_url_via_dept_id {
