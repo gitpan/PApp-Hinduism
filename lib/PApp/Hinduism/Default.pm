@@ -25,12 +25,11 @@ sub select_nextval {
 }
 
 sub insert_dept {
-   my ($app, $department) = @_;
+   my ($app, $department, $url, $school_id) = @_;
    
    my $nextval = $app->select_nextval('dept___id');
 
-   sql_exec "INSERT into dept VALUES ($nextval, '$department')";
-
+   sql_exec "INSERT into dept VALUES ($nextval, '$department', '$url', $school_id)";
 }
 
 sub select_publisher_id {
@@ -196,6 +195,11 @@ sub select_dept_url_via_dept_id {
 sub select_school_id_via_dept_id {
     my ($app, $dept_id) = @_;
     sql_fetch \my ($school_id), "SELECT school_id from dept where id = $dept_id";
+}
+
+sub select_school_id_via_school_name {
+    my ($app, $name) = @_;
+    sql_fetch \my ($school_name), "SELECT id from school where name = '$name'";
 }
 
 sub find_school_name_from_dept_id {

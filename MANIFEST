@@ -1,6 +1,8 @@
 Changes
 Hinduism.pm
 MANIFEST
+SEARCH-TERMS
+hindu_courses.pgsql
 Makefile.PL
 release
 test.pl
