@@ -49,9 +49,6 @@ $school_id,
 ,
 'Sanskrit 102b');
 
-    my $x = $app->select_id_for_person_type('lecturer');
-    my $cl = $app->select_person($x, 'Kuijp', 'Leonard', 'W. J. van der');
-    $app->insert_course_lecturer($seq_id, $cl);
 
 #    my $mid  = 10;# "A Rapid Sanskrit Method" $app->select_id_from_name('Bhagavad Gita', 'book');
 #    my $mtid = $app->select_id_from_name('book','material_type');
@@ -60,3 +57,9 @@ $school_id,
 }
 
 =cut
+
+
+    my $cid = 37;
+my $x  = $app->select_id_for_person_type('lecturer');
+my $cl = $app->select_person($x, 'Witzel', 'Michael');
+$app->insert_course_lecturer($cid, $cl);

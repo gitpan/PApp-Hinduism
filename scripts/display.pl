@@ -31,13 +31,16 @@ print '<html>
 
 my @dept_id = $app->select_unique_dept_id_from_course;
 for our $dept_id (@dept_id) {
-    my $school_name = $app->find_school_name_from_dept_id($dept_id);
 
-    print "<h1>$school_name</h1>\n";
+    warn "DEPT_ID: $dept_id";
+
+    my $school_name = $app->find_school_name_from_dept_id($dept_id);
+    my $dept_name = $app->select_name_from_id($dept_id, 'dept');
+    print "<h2>$school_name ($dept_name)</h2>\n";
 
     my $school_id = $app->select_school_id_via_dept_id($dept_id);
 #    warn $school_id;
-    our @course_row = $app->select_course_rows_via_dept_id($school_id);
+    our @course_row = $app->select_course_rows_via_dept_id($dept_id);
     for my $course_row (@course_row) {
 	print " <h3> 
 <a href=$course_row->[2]>
@@ -45,12 +48,12 @@ $course_row->[1] ($course_row->[4])
 </a>
  </h3>\n";
 	print "<P>Lecturer: ", $app->select_course_lecturer_via_course_id($course_row->[0]), $/;
-	print "<P>", $course_row->[4];
+	print "<P>", $course_row->[5];
 	my @course_material = $app->select_course_materials_via_course_id($course_row->[0]);
 	if (@course_material) {
 	    print "<P><P><B><I>Course Materials</B></I>";
 	} else {
-	    print "No course materials listed";
+	    print "<P>No course materials listed";
 	}
 	for my $course_material (@course_material) {
 	    print "<P>\n";
