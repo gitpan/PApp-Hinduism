@@ -4,10 +4,33 @@ use Data::Dumper;
 use DBIx::Recordset;
 use PApp::SQL;
 
+sub create_temp {
+    my ($app, $table) = @_;
+    my $temp_table  = "temp_${table}$$";
+
+    my $sql = "create table $temp_table as select * from $table";
+    warn $sql;
+    sql_exec $sql;
+
+#    $sql = "drop table $table";
+#    warn $sql;
+#    sql_exec $sql;
+}
+    
+
 sub select_nextval {
     my ($ah, $sequence_name) = @_;
     sql_fetch \my($number), "select nextval('$sequence_name')";
     $number;
+}
+
+sub insert_dept {
+   my ($app, $department) = @_;
+   
+   my $nextval = $app->select_nextval('dept___id');
+
+   sql_exec "INSERT into dept VALUES ($nextval, '$department')";
+
 }
 
 sub select_publisher_id {
@@ -90,12 +113,48 @@ sub insert_school {
     sql_exec "INSERT into SCHOOL VALUES ($seq_id,'$school')";
 }
 
+sub pretty_print_course_reader {
+    print "Course Reader\n";
+}
+
+sub pretty_print_book {
+    my ($app, $book_id) = @_;
+    my ($id, $name, $publisher_id, $author_id, $pub_year) =
+	sql_fetch "SELECT * FROM book where id = $book_id";
+
+    my $OUT = "<I>$name</I>";
+
+    if ($publisher_id) {
+	my $p = $app->select_name_from_id($publisher_id, 'publisher');
+	$OUT .= " ($p : $pub_year)\n";
+    }
+
+    if ($author_id) {
+	$OUT .= $app->print_person($author_id) . "\n";
+    }
+
+    print "$OUT\n";
+}
+
+sub pretty_print_course_material {
+    my ($app, $cmat) = @_;
+    my $mtype = $app->select_name_from_id($cmat->[1],'material_type');
+    my $method = "pretty_print_$mtype";
+    $app->$method($cmat->[2]);
+}
+
 sub select_course_materials_via_course_id {
     my ($ah, $course_id) = @_;
     my $sql = "SELECT * FROM course_material WHERE course_id = $course_id";
-    warn $sql;
-    my @course_material = sql_fetchall $sql;
-    Dumper(\@course_material);
+    sql_fetchall $sql;
+}
+
+sub print_person {
+    my ($app, $person_id) = @_;
+
+    $sql = "SELECT first_name, middle_name, last_name FROM person WHERE id = $person_id";
+    sql_fetch \my ($first_name, $middle_name, $last_name), $sql;
+    "$first_name $middlename $last_name";
 }
 
 sub select_course_lecturer_via_course_id {
@@ -104,12 +163,10 @@ sub select_course_lecturer_via_course_id {
 #    warn $sql;
     sql_fetch \my($lecturer_id), $sql;
 
-    return "None listed" unless $lecturer_id;
+    return "No lecturer listed" unless $lecturer_id;
 
-    $sql = "SELECT first_name, middle_name, last_name FROM person WHERE id = $lecturer_id";
-#    warn $sql;
-    sql_fetch \my ($first_name, $middle_name, $last_name), $sql;
-    "$first_name $middlename $last_name";
+    $ah->print_person($lecturer_id);
+
 }
 
 
@@ -127,20 +184,30 @@ sub insert_person {
     sql_exec "INSERT into person VALUES ($seq, $person_type_id, '$last_name', '$first_name', '$middle_name')";
 }
 
-sub select_school_id {
-    my ($ah, $school) = @_;
-    sql_fetch \my($school_id), "select id from SCHOOL WHERE name = '$school'";
-    $school_id;
+sub select_unique_dept_id_from_course {
+    sql_fetchall "select distinct dept_id from course order by dept_id";
+}
+
+sub select_school_id_via_dept_id {
+    my ($app, $dept_id) = @_;
+    sql_fetch \my ($school_id), "SELECT school_id from dept where id = $dept_id";
+}
+
+sub find_school_name_from_dept_id {
+    my ($app, $dept_id) = @_;
+    sql_fetch \my ($school_id), "SELECT school_id from dept where id = $dept_id";
+    $app->select_name_from_id($school_id, 'school');
 }
 
 sub select_course_name_via_school_id {
+# NO LONGER VALID
     my ($ah, $school_id) = @_;
     sql_fetchall "select name from course where school_id = $school_id";
 }
 
-sub select_course_rows_via_school_id {
-    my ($ah, $school_id) = @_;
-    sql_fetchall "select * from course where school_id = $school_id order by id";
+sub select_course_rows_via_dept_id {
+    my ($ah, $dept_id) = @_;
+    sql_fetchall "select * from course where dept_id = $dept_id order by id";
 }
     
 
@@ -162,6 +229,14 @@ sub select_id_from_name {
     warn $sql;
     sql_fetch \my($id), $sql;
     $id;
+}
+
+sub select_name_from_id {
+    my ($ah, $id, $table) = @_;
+    my $sql = "select name from $table WHERE id = $id";
+   # warn $sql;
+    sql_fetch $sql;
+
 }
 
 sub select_this_from_that {
