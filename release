@@ -1,0 +1,7 @@
+#!/bin/sh -x
+
+perl Makefile.PL PREFIX=$PERL
+rm *.tar.gz
+make tardist
+pause *.tar.gz
+db-backup.pl

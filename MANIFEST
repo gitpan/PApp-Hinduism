@@ -2,6 +2,7 @@ Changes
 Hinduism.pm
 MANIFEST
 Makefile.PL
+release
 test.pl
 lib/PApp/Hinduism/Default.pm
 scripts/build.pl

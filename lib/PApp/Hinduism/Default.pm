@@ -188,6 +188,11 @@ sub select_unique_dept_id_from_course {
     sql_fetchall "select distinct dept_id from course order by dept_id";
 }
 
+sub select_dept_url_via_dept_id {
+    my ($app, $dept_id) = @_;
+    sql_fetch \my ($dept_id), "SELECT url from dept where id = $dept_id";
+}
+
 sub select_school_id_via_dept_id {
     my ($app, $dept_id) = @_;
     sql_fetch \my ($school_id), "SELECT school_id from dept where id = $dept_id";

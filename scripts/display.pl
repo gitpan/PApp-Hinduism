@@ -1,5 +1,6 @@
 #!/Users/metaperl/install/perl/bin/perl
 
+# HYPERLINK DEPT
 
 use lib '/Users/metaperl/src/papp_hinduism/lib';
 
@@ -36,7 +37,10 @@ for our $dept_id (@dept_id) {
 
     my $school_name = $app->find_school_name_from_dept_id($dept_id);
     my $dept_name = $app->select_name_from_id($dept_id, 'dept');
-    print "<h2>$school_name ($dept_name)</h2>\n";
+    my $dept_url = $app->select_dept_url_via_dept_id($dept_id);
+    my $hotlink = "
+<a href=$dept_url>$dept_name</a>";
+    print "<h2>$school_name ($hotlink)</h2>\n";
 
     my $school_id = $app->select_school_id_via_dept_id($dept_id);
 #    warn $school_id;
